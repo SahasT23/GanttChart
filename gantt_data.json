@@ -1,0 +1,32 @@
+{
+  "tasks": {
+    "556c8748-92a2-4a4d-aa5d-c339393db5bf": {
+      "id": "556c8748-92a2-4a4d-aa5d-c339393db5bf",
+      "name": "test task",
+      "start_date": "2025-09-05",
+      "end_date": "2025-09-12",
+      "progress": 0.0,
+      "color": "#34a853",
+      "dependencies": [],
+      "is_milestone": false,
+      "parent_id": null,
+      "created_at": "2025-09-05T11:36:58.390434",
+      "updated_at": "2025-09-05T11:36:58.390434"
+    },
+    "a6c1a297-a8f0-408e-9157-ab0fef63a3f9": {
+      "id": "a6c1a297-a8f0-408e-9157-ab0fef63a3f9",
+      "name": "another test task",
+      "start_date": "2025-09-01",
+      "end_date": "2025-09-03",
+      "progress": 15.0,
+      "color": "#ea4335",
+      "dependencies": [
+        "556c8748-92a2-4a4d-aa5d-c339393db5bf"
+      ],
+      "is_milestone": false,
+      "parent_id": null,
+      "created_at": "2025-09-05T11:37:35.075475",
+      "updated_at": "2025-09-05T11:37:35.075475"
+    }
+  }
+}
