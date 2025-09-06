@@ -101,7 +101,9 @@ def load_data():
             created_at=now,
             updated_at=now
         )
-        save_settings(settings)
+        # Save default settings
+        with open(SETTINGS_FILE, 'w') as f:
+            json.dump(settings.model_dump(), f, indent=2)
     
     return tasks, logs, settings
 
@@ -478,7 +480,7 @@ async def update_settings(settings_update: dict):
     project_settings.updated_at = datetime.now().isoformat()
     save_settings(project_settings)
     
-    return {"settings": project_settings, "message": "Settings updated successfully"}
+    return {"settings": project_settings.model_dump(), "message": "Settings updated successfully"}
 
 # Export functionality
 @app.get("/api/export")
