@@ -8,6 +8,9 @@ import os
 from datetime import datetime, date
 import uuid
 
+# Need to add SQLite or other DB for production use
+# For simplicity, using JSON file storage here
+
 app = FastAPI(title="Gantt Chart API", description="A comprehensive Gantt chart application API")
 
 # Data models
