@@ -80,4 +80,55 @@ A **Gantt chart** is a visual project management tool that helps track tasks, de
 
 ---
 
+## 📖 How to Use
+Adding Your First Task
 
+Click the "+ Add Task" button in the left sidebar
+Fill in the form:
+
+1. Task Name: "Design website mockup"
+2. Start Date: Today's date
+3. End Date: One week from now
+4. Color: Pick a color you like
+5. Progress: 0 (not started yet)
+
+
+### Click Save
+
+Your task will appear on the timeline.
+
+### Creating Subtasks
+
+1. Find a task you want to add subtasks to
+2. Click the ➕ button next to it
+3. Fill in the subtask details
+4. Click Save
+
+The subtask will appear indented under the parent task.
+
+### Editing Tasks
+
+1. Double-click any task to edit it
+2. Or click once to select, then click the ✏️ (edit) button
+3. Make your changes and click Save
+
+### Deleting Tasks
+
+1. Click on a task to select it
+2. Click the 🗑️ (trash) button
+3. Confirm you want to delete it
+
+### Using Dependencies
+
+Dependencies let you say "Task B can't start until Task A is done":
+
+1. Edit the dependent task (Task B)
+2. In the Dependencies dropdown, select the task(s) it depends on (Task A)
+3. Hold Ctrl/Cmd to select multiple dependencies
+4. Click Save
+
+### Expanding/Collapsing Subtasks
+
+1. Click the ▶ arrow next to a parent task to expand and see subtasks
+2. Click the ▼ arrow to collapse and hide subtasks
+3. Use "Expand All" or "Collapse All" buttons in the toolbar
