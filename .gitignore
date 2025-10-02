@@ -1,3 +1,8 @@
 gantt_data.json
 gantt_logs.json
 project_settings.json
+__pycache__/
+*.pyc
+.DS_Store
+.vscode/
+.db/
