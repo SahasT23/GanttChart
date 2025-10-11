@@ -1,2 +1,5 @@
-Need to add clearer sub-task support.
-Need to add better dependency visualisation.
+Need to add clearer sub-task support. DONE
+Need to add better dependency visualisation. DONE
+
+Need to make the notes (markdown section) to take up more space and then add a way to export the markdown files. 
+Need to add a migration script as well. 
