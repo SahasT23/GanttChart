@@ -1,5 +1,11 @@
 # 📊 Gantt Chart Application
 
+## TODO
+
+* Need to add a migration script for the code.
+* Need to add .xlsx file storage and spreadsheet/weekly planner capability.
+* Need to add a method for automated email messages as well as user friendly method to add their email, as well as a way for a user to set the time and days that you want a reminder email, along with a method that let's you select time blocks etc. 
+
 A beautiful and powerful project management tool with a Gantt chart interface. Built with Python and SQLite - perfect for managing projects, tasks, and deadlines!
 
 ![Project Management](https://img.shields.io/badge/Type-Project%20Management-blue)
