@@ -1007,6 +1007,144 @@
             background-color: #f0f0f0;
             color: #333;
         }
+
+        /* Markdown Viewer Modal */
+        .md-viewer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10001;
+        }
+
+        .md-viewer-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .md-viewer-content {
+            background: white;
+            width: 90%;
+            max-width: 900px;
+            height: 80vh;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .md-viewer-header {
+            padding: 15px 20px;
+            background: #217346;
+            color: white;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .md-viewer-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .md-viewer-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+        }
+
+        .md-viewer-body {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .md-viewer-body h1,
+        .md-viewer-body h2,
+        .md-viewer-body h3 {
+            color: #217346;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .md-viewer-body code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        .md-viewer-body pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        /* PDF Viewer Modal */
+        .pdf-viewer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10001;
+        }
+
+        .pdf-viewer-modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pdf-viewer-header {
+            padding: 15px 20px;
+            background: #1a1a1a;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pdf-viewer-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .pdf-viewer-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .pdf-viewer-body {
+            flex: 1;
+            padding: 20px;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .pdf-viewer-iframe {
+            width: 100%;
+            max-width: 900px;
+            height: 100%;
+            border: none;
+            background: white;
+        }
     </style>
 </head>
 <body>
@@ -1029,6 +1167,7 @@
             <div class="sidebar-tabs">
                 <button class="sidebar-tab active" onclick="switchTab('tasks')">Tasks</button>
                 <button class="sidebar-tab" onclick="switchTab('notes')">Notes</button>
+                <button class="sidebar-tab" onclick="switchTab('files')">Files</button>
                 <button class="sidebar-tab" onclick="switchTab('logs')">Logs</button>
             </div>
 
@@ -1077,6 +1216,33 @@
                         <h4>Recent Actions</h4>
                         <div id="logs-container">
                             <!-- Logs will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Files Panel -->
+                <div id="files-panel" class="sidebar-panel">
+                    <div class="files-section">
+                        <h4 style="margin-bottom: 15px;">📁 View Files</h4>
+                        
+                        <!-- Markdown Viewer -->
+                        <div id="md-drop-zone" style="margin-bottom: 15px;">
+                            <div style="text-align: center; padding: 20px; border: 2px dashed #217346; border-radius: 8px; background: #f8fef8; cursor: pointer;">
+                                <div style="font-size: 24px; margin-bottom: 8px;">📝</div>
+                                <div style="font-size: 13px; color: #217346; font-weight: 600;">View Markdown File</div>
+                                <div style="font-size: 11px; color: #666; margin-top: 4px;">Click to browse or drag & drop .md</div>
+                            </div>
+                            <input type="file" id="md-file-input" accept=".md" style="display: none;">
+                        </div>
+
+                        <!-- PDF Viewer -->
+                        <div id="pdf-drop-zone">
+                            <div style="text-align: center; padding: 20px; border: 2px dashed #d32f2f; border-radius: 8px; background: #fff8f8; cursor: pointer;">
+                                <div style="font-size: 24px; margin-bottom: 8px;">📄</div>
+                                <div style="font-size: 13px; color: #d32f2f; font-weight: 600;">View PDF File</div>
+                                <div style="font-size: 11px; color: #666; margin-top: 4px;">Click to browse or drag & drop .pdf</div>
+                            </div>
+                            <input type="file" id="pdf-file-input" accept=".pdf" style="display: none;">
                         </div>
                     </div>
                 </div>
@@ -2586,6 +2752,144 @@
             </div>
         </div>
     </div>
+
+    <!-- Markdown Viewer Modal -->
+    <div class="md-viewer-modal" id="mdViewerModal">
+        <div class="md-viewer-content">
+            <div class="md-viewer-header">
+                <div class="md-viewer-title" id="mdViewerTitle">Markdown Viewer</div>
+                <button class="md-viewer-close" onclick="closeMdViewer()">&times;</button>
+            </div>
+            <div class="md-viewer-body" id="mdViewerBody"></div>
+        </div>
+    </div>
+
+    <!-- PDF Viewer Modal -->
+    <div class="pdf-viewer-modal" id="pdfViewerModal">
+        <div class="pdf-viewer-header">
+            <div class="pdf-viewer-title" id="pdfViewerTitle">PDF Viewer</div>
+            <button class="pdf-viewer-close" onclick="closePdfViewer()">&times;</button>
+        </div>
+        <div class="pdf-viewer-body">
+            <iframe class="pdf-viewer-iframe" id="pdfViewerIframe"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // FILES VIEWER FUNCTIONALITY
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeFileViewers();
+        });
+
+        function initializeFileViewers() {
+            // Markdown drop zone
+            const mdZone = document.getElementById('md-drop-zone');
+            const mdInput = document.getElementById('md-file-input');
+            
+            mdZone.onclick = () => mdInput.click();
+            mdInput.onchange = (e) => {
+                if (e.target.files[0]) viewMarkdownFile(e.target.files[0]);
+            };
+            
+            mdZone.ondragover = (e) => {
+                e.preventDefault();
+                mdZone.querySelector('div').style.borderColor = '#185c37';
+                mdZone.querySelector('div').style.background = '#e8f5e9';
+            };
+            
+            mdZone.ondragleave = () => {
+                mdZone.querySelector('div').style.borderColor = '#217346';
+                mdZone.querySelector('div').style.background = '#f8fef8';
+            };
+            
+            mdZone.ondrop = (e) => {
+                e.preventDefault();
+                mdZone.querySelector('div').style.borderColor = '#217346';
+                mdZone.querySelector('div').style.background = '#f8fef8';
+                const file = e.dataTransfer.files[0];
+                if (file && file.name.endsWith('.md')) {
+                    viewMarkdownFile(file);
+                } else {
+                    alert('Please drop a .md file');
+                }
+            };
+
+            // PDF drop zone
+            const pdfZone = document.getElementById('pdf-drop-zone');
+            const pdfInput = document.getElementById('pdf-file-input');
+            
+            pdfZone.onclick = () => pdfInput.click();
+            pdfInput.onchange = (e) => {
+                if (e.target.files[0]) viewPdfFile(e.target.files[0]);
+            };
+            
+            pdfZone.ondragover = (e) => {
+                e.preventDefault();
+                pdfZone.querySelector('div').style.borderColor = '#b71c1c';
+                pdfZone.querySelector('div').style.background = '#ffebee';
+            };
+            
+            pdfZone.ondragleave = () => {
+                pdfZone.querySelector('div').style.borderColor = '#d32f2f';
+                pdfZone.querySelector('div').style.background = '#fff8f8';
+            };
+            
+            pdfZone.ondrop = (e) => {
+                e.preventDefault();
+                pdfZone.querySelector('div').style.borderColor = '#d32f2f';
+                pdfZone.querySelector('div').style.background = '#fff8f8';
+                const file = e.dataTransfer.files[0];
+                if (file && file.name.endsWith('.pdf')) {
+                    viewPdfFile(file);
+                } else {
+                    alert('Please drop a .pdf file');
+                }
+            };
+        }
+
+        function viewMarkdownFile(file) {
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result;
+                document.getElementById('mdViewerTitle').textContent = file.name;
+                document.getElementById('mdViewerBody').innerHTML = marked.parse(content);
+                document.getElementById('mdViewerModal').classList.add('active');
+            };
+            reader.readAsText(file);
+        }
+
+        function closeMdViewer() {
+            document.getElementById('mdViewerModal').classList.remove('active');
+        }
+
+        function viewPdfFile(file) {
+            if (!file) return;
+            
+            const url = URL.createObjectURL(file);
+            document.getElementById('pdfViewerTitle').textContent = file.name;
+            document.getElementById('pdfViewerIframe').src = url;
+            document.getElementById('pdfViewerModal').classList.add('active');
+        }
+
+        function closePdfViewer() {
+            const iframe = document.getElementById('pdfViewerIframe');
+            if (iframe.src) {
+                URL.revokeObjectURL(iframe.src);
+            }
+            iframe.src = '';
+            document.getElementById('pdfViewerModal').classList.remove('active');
+        }
+
+        // Close viewers on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMdViewer();
+                closePdfViewer();
+            }
+        });
+    </script>
 
 </body>
 </html>
