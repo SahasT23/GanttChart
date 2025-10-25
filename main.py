@@ -1,10 +1,11 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, UploadFile, File
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel
 from typing import List, Optional, Dict
-from datetime import datetime
+from datetime import datetime, timedelta
 import uuid
+import io
 
 import database as db
 
@@ -93,6 +94,47 @@ class TaskUpdate(BaseModel):
     assigned_to: Optional[str] = None
     priority: Optional[str] = None
     parent_id: Optional[str] = None
+
+class WeeklyPlanner(BaseModel):
+    id: str
+    project_id: Optional[str] = None
+    week_start_date: str
+    week_end_date: str
+    custom_rows: List[str] = []
+    custom_columns: List[str] = []
+    created_at: str
+    updated_at: str
+
+class PlannerCreate(BaseModel):
+    week_start_date: str
+    project_id: Optional[str] = None
+
+class PlannerUpdate(BaseModel):
+    custom_rows: Optional[List[str]] = None
+    custom_columns: Optional[List[str]] = None
+
+class TimeBlock(BaseModel):
+    id: str
+    planner_id: str
+    day_index: int
+    time_slot: str
+    title: Optional[str] = None
+    description: Optional[str] = None
+    color: str = "#4285f4"
+    created_at: str
+    updated_at: str
+
+class TimeBlockCreate(BaseModel):
+    day_index: int
+    time_slot: str
+    title: Optional[str] = None
+    description: Optional[str] = None
+    color: str = "#4285f4"
+
+class TimeBlockUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    color: Optional[str] = None
 
 @app.on_event("startup")
 async def startup_event():
@@ -620,6 +662,191 @@ async def health_check():
         "logs_count": logs_count,
         "current_project": project_id
     }
+
+# Weekly planner endpoints
+@app.get("/planner")
+async def read_planner():
+    """Serve the weekly planner application"""
+    return FileResponse("static/planner.html")
+
+@app.post("/api/planners")
+async def create_planner(planner_data: PlannerCreate):
+    """Create a new weekly planner"""
+    planner_id = str(uuid.uuid4())
+    now = datetime.now().isoformat()
+    
+    # Calculate week end date (6 days after start)
+    start_date = datetime.fromisoformat(planner_data.week_start_date)
+    end_date = start_date + timedelta(days=6)
+    
+    planner_dict = {
+        'id': planner_id,
+        'project_id': planner_data.project_id or get_current_project_id(),
+        'week_start_date': planner_data.week_start_date,
+        'week_end_date': end_date.date().isoformat(),
+        'custom_rows': [],
+        'custom_columns': [],
+        'created_at': now,
+        'updated_at': now
+    }
+    
+    db.create_weekly_planner(planner_dict)
+    return {"planner": planner_dict, "message": "Planner created successfully"}
+
+@app.get("/api/planners")
+async def get_planners():
+    """Get all weekly planners for the active project"""
+    project_id = get_current_project_id()
+    planners = db.get_all_planners(project_id)
+    return {"planners": planners}
+
+@app.get("/api/planners/week/{week_start_date}")
+async def get_planner_by_week(week_start_date: str):
+    """Get planner for a specific week"""
+    project_id = get_current_project_id()
+    planner = db.get_planner_by_week(week_start_date, project_id)
+    
+    if not planner:
+        # Create a new planner for this week
+        planner_id = str(uuid.uuid4())
+        now = datetime.now().isoformat()
+        start_date = datetime.fromisoformat(week_start_date)
+        end_date = start_date + timedelta(days=6)
+        
+        planner = {
+            'id': planner_id,
+            'project_id': project_id,
+            'week_start_date': week_start_date,
+            'week_end_date': end_date.date().isoformat(),
+            'custom_rows': [],
+            'custom_columns': [],
+            'created_at': now,
+            'updated_at': now
+        }
+        db.create_weekly_planner(planner)
+    
+    # Get time blocks for this planner
+    time_blocks = db.get_time_blocks(planner['id'])
+    
+    return {
+        "planner": planner,
+        "time_blocks": time_blocks
+    }
+
+@app.put("/api/planners/{planner_id}")
+async def update_planner(planner_id: str, updates: PlannerUpdate):
+    """Update a weekly planner"""
+    update_data = updates.model_dump(exclude_unset=True)
+    updated_planner = db.update_planner(planner_id, update_data)
+    
+    if not updated_planner:
+        raise HTTPException(status_code=404, detail="Planner not found")
+    
+    return {"planner": updated_planner, "message": "Planner updated successfully"}
+
+# Time block endpoints
+@app.post("/api/planners/{planner_id}/blocks")
+async def create_time_block(planner_id: str, block_data: TimeBlockCreate):
+    """Create a new time block"""
+    block_id = str(uuid.uuid4())
+    now = datetime.now().isoformat()
+    
+    block_dict = {
+        'id': block_id,
+        'planner_id': planner_id,
+        'day_index': block_data.day_index,
+        'time_slot': block_data.time_slot,
+        'title': block_data.title,
+        'description': block_data.description,
+        'color': block_data.color,
+        'created_at': now,
+        'updated_at': now
+    }
+    
+    db.create_time_block(block_dict)
+    return {"block": block_dict, "message": "Time block created successfully"}
+
+@app.get("/api/planners/{planner_id}/blocks")
+async def get_planner_blocks(planner_id: str):
+    """Get all time blocks for a planner"""
+    blocks = db.get_time_blocks(planner_id)
+    return {"blocks": blocks}
+
+@app.put("/api/blocks/{block_id}")
+async def update_block(block_id: str, updates: TimeBlockUpdate):
+    """Update a time block"""
+    update_data = updates.model_dump(exclude_unset=True)
+    updated_block = db.update_time_block(block_id, update_data)
+    
+    if not updated_block:
+        raise HTTPException(status_code=404, detail="Time block not found")
+    
+    return {"block": updated_block, "message": "Time block updated successfully"}
+
+@app.delete("/api/blocks/{block_id}")
+async def delete_block(block_id: str):
+    """Delete a time block"""
+    deleted = db.delete_time_block(block_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Time block not found")
+    
+    return {"message": "Time block deleted successfully"}
+
+# XLSX file endpoints
+@app.post("/api/xlsx/upload")
+async def upload_xlsx(file: UploadFile = File(...)):
+    """Upload an xlsx file"""
+    if not file.filename.endswith(('.xlsx', '.xls')):
+        raise HTTPException(status_code=400, detail="Only Excel files are allowed")
+    
+    project_id = get_current_project_id()
+    file_id = str(uuid.uuid4())
+    now = datetime.now().isoformat()
+    
+    file_data_bytes = await file.read()
+    
+    file_dict = {
+        'id': file_id,
+        'project_id': project_id,
+        'filename': file.filename,
+        'file_data': file_data_bytes,
+        'created_at': now,
+        'updated_at': now
+    }
+    
+    db.create_xlsx_file(file_dict)
+    return {"file_id": file_id, "filename": file.filename, "message": "File uploaded successfully"}
+
+@app.get("/api/xlsx")
+async def get_xlsx_files():
+    """Get all xlsx files for the active project"""
+    project_id = get_current_project_id()
+    files = db.get_all_xlsx_files(project_id)
+    return {"files": files}
+
+@app.get("/api/xlsx/{file_id}/download")
+async def download_xlsx(file_id: str):
+    """Download an xlsx file"""
+    file_data = db.get_xlsx_file(file_id)
+    if not file_data:
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return Response(
+        content=file_data['file_data'],
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={
+            "Content-Disposition": f"attachment; filename={file_data['filename']}"
+        }
+    )
+
+@app.delete("/api/xlsx/{file_id}")
+async def delete_xlsx(file_id: str):
+    """Delete an xlsx file"""
+    deleted = db.delete_xlsx_file(file_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return {"message": "File deleted successfully"}
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

@@ -149,6 +149,362 @@
             font-size: 12px;
         }
 
+        .btn.planning-mode {
+            background-color: #217346;
+            color: white;
+            border-color: #217346;
+            font-weight: 500;
+        }
+
+        .btn.planning-mode:hover {
+            background-color: #185c37;
+        }
+
+        /* Planning Mode Styles - Excel-like */
+        .planner-view {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: white;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .planner-view.active {
+            display: flex;
+        }
+
+        .planner-header {
+            background: #217346;
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #185c37;
+        }
+
+        .planner-header h1 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .planner-toolbar {
+            background: #f0f0f0;
+            padding: 8px 24px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            border-bottom: 1px solid #d0d0d0;
+        }
+
+        .planner-btn {
+            padding: 6px 16px;
+            border: 1px solid #217346;
+            background: white;
+            color: #217346;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .planner-btn:hover {
+            background: #217346;
+            color: white;
+        }
+
+        .planner-btn.active {
+            background: #217346;
+            color: white;
+        }
+
+        .exit-planner-btn {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .exit-planner-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .planner-calendar-bar {
+            background: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .planner-weeks {
+            display: flex;
+            gap: 8px;
+            min-width: max-content;
+        }
+
+        .planner-week {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #d0d0d0;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .planner-week:hover {
+            border-color: #217346;
+            background: #f8f8f8;
+        }
+
+        .planner-week.current-week {
+            background: #217346;
+            color: white;
+            border-color: #217346;
+            font-weight: 600;
+        }
+
+        .planner-main {
+            flex: 1;
+            overflow: auto;
+            padding: 24px;
+            background: white;
+        }
+
+        .planner-week-title {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .planner-week-title h2 {
+            font-size: 20px;
+            color: #217346;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .planner-week-title .date-range {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .planner-grid {
+            display: grid;
+            grid-template-columns: 70px repeat(7, 1fr);
+            border: 1px solid #d0d0d0;
+            background: white;
+        }
+
+        .planner-cell {
+            border-right: 1px solid #d0d0d0;
+            border-bottom: 1px solid #d0d0d0;
+            padding: 8px;
+            background: white;
+        }
+
+        .planner-header-cell {
+            background: #f0f0f0;
+            font-weight: 600;
+            text-align: center;
+            padding: 10px 8px;
+            font-size: 13px;
+            color: #333;
+            border-right: 1px solid #d0d0d0;
+            border-bottom: 2px solid #217346;
+        }
+
+        .planner-time-cell {
+            background: #f8f8f8;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 2px solid #d0d0d0;
+        }
+
+        .planner-content-cell {
+            min-height: 50px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .planner-content-cell:hover {
+            background: #f8fef8;
+        }
+
+        .planner-content-cell.filled {
+            background: #e8f5e9;
+        }
+
+        .planner-content-cell.filled:hover {
+            background: #d4edd7;
+        }
+
+        .block-content-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #217346;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .block-content-desc {
+            font-size: 10px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .empty-cell-indicator {
+            color: #ccc;
+            font-size: 14px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        /* Planner Modal */
+        .planner-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .planner-modal.active {
+            display: flex;
+        }
+
+        .planner-modal-content {
+            background: white;
+            border: 1px solid #d0d0d0;
+            border-radius: 2px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .planner-modal-header {
+            background: #217346;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #185c37;
+        }
+
+        .planner-modal-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .planner-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+        }
+
+        .planner-modal-body {
+            padding: 20px;
+        }
+
+        .planner-form-group {
+            margin-bottom: 16px;
+        }
+
+        .planner-form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .planner-form-group input,
+        .planner-form-group textarea,
+        .planner-form-group select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #d0d0d0;
+            border-radius: 2px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .planner-form-group input:focus,
+        .planner-form-group textarea:focus,
+        .planner-form-group select:focus {
+            outline: none;
+            border-color: #217346;
+        }
+
+        .planner-form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .planner-modal-footer {
+            padding: 12px 20px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            background: #f8f8f8;
+        }
+
+        .planner-modal-btn {
+            padding: 8px 16px;
+            border: 1px solid #d0d0d0;
+            background: white;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .planner-modal-btn.save {
+            background: #217346;
+            color: white;
+            border-color: #217346;
+        }
+
+        .planner-modal-btn.delete {
+            background: #d32f2f;
+            color: white;
+            border-color: #d32f2f;
+        }
+
+        .planner-modal-btn:hover {
+            opacity: 0.9;
+        }
+
         /* Calendar styles for notes */
         .calendar-container {
             margin-top: 15px;
@@ -731,6 +1087,8 @@
         <div class="main-area">
             <!-- Toolbar -->
             <div class="toolbar">
+                <button class="btn planning-mode" onclick="enterPlanningMode()">Planning Mode</button>
+                <div class="toolbar-separator"></div>
                 <button class="btn" onclick="zoomIn()">Zoom in</button>
                 <button class="btn" onclick="zoomOut()">Zoom out</button>
                 <button class="btn" onclick="fitToScreen()">Zoom to fit</button>
@@ -1797,6 +2155,437 @@
                 console.error('Error refreshing logs:', error);
             }
         }, 30000);
+
+        // ============================================
+        // PLANNING MODE FUNCTIONALITY
+        // ============================================
+
+        const API_BASE = '/api';
+        const PLANNER_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        let plannerCurrentWeekStart = null;
+        let plannerData = null;
+        let plannerTimeBlocks = {};
+        let editingPlannerBlock = null;
+
+        function enterPlanningMode() {
+            document.getElementById('plannerView').classList.add('active');
+            initializePlanner();
+        }
+
+        function exitPlanningMode() {
+            document.getElementById('plannerView').classList.remove('active');
+        }
+
+        function getPlannerMonday(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(d.setDate(diff));
+        }
+
+        function formatPlannerDate(date) {
+            const options = { month: 'short', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        function formatPlannerDateISO(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function initializePlanner() {
+            console.log('Initializing planner...');
+            const today = new Date();
+            plannerCurrentWeekStart = getPlannerMonday(today);
+            console.log('Current week start:', plannerCurrentWeekStart);
+            renderPlannerCalendar();
+            loadPlannerWeek(formatPlannerDateISO(plannerCurrentWeekStart));
+        }
+
+        function renderPlannerCalendar() {
+            const container = document.getElementById('plannerWeeksContainer');
+            container.innerHTML = '';
+
+            // Generate 20 weeks instead of 11 for a fuller bar
+            for (let i = 0; i < 20; i++) {
+                const weekStart = new Date(plannerCurrentWeekStart);
+                weekStart.setDate(weekStart.getDate() + (i * 7));
+
+                const weekDiv = document.createElement('div');
+                weekDiv.className = 'planner-week';
+                if (i === 0) weekDiv.classList.add('current-week');
+
+                weekDiv.innerHTML = `
+                    <div>${formatPlannerDate(weekStart)}</div>
+                    <div style="font-size: 10px; opacity: 0.8;">${i === 0 ? 'This Week' : 'Week ' + (i + 1)}</div>
+                `;
+
+                weekDiv.onclick = () => loadPlannerWeek(formatPlannerDateISO(weekStart));
+                container.appendChild(weekDiv);
+            }
+        }
+
+        async function loadPlannerWeek(weekStartDate) {
+            console.log('Loading planner week:', weekStartDate);
+            try {
+                const response = await fetch(`${API_BASE}/planners/week/${weekStartDate}`);
+                
+                if (!response.ok) {
+                    console.error('API response not OK:', response.status, response.statusText);
+                    alert(`Error loading planner: ${response.status} ${response.statusText}`);
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('Planner data received:', data);
+
+                plannerData = data.planner;
+                plannerCurrentWeekStart = new Date(weekStartDate);
+
+                const weekEnd = new Date(plannerCurrentWeekStart);
+                weekEnd.setDate(weekEnd.getDate() + 6);
+
+                document.getElementById('plannerWeekTitle').textContent = `Week of ${formatPlannerDate(plannerCurrentWeekStart)}`;
+                document.getElementById('plannerDateRange').textContent = 
+                    `${formatPlannerDate(plannerCurrentWeekStart)} - ${formatPlannerDate(weekEnd)}`;
+
+                plannerTimeBlocks = {};
+                data.time_blocks.forEach(block => {
+                    const key = `${block.day_index}-${block.time_slot}`;
+                    plannerTimeBlocks[key] = block;
+                });
+
+                console.log('Rendering planner grid...');
+                renderPlannerGrid();
+                updatePlannerCalendarHighlight(weekStartDate);
+                console.log('Planner loaded successfully');
+
+            } catch (error) {
+                console.error('Error loading planner week:', error);
+                alert('Error loading planner: ' + error.message);
+            }
+        }
+
+        function updatePlannerCalendarHighlight(weekStartDate) {
+            const weeks = document.querySelectorAll('.planner-week');
+            weeks.forEach((week, index) => {
+                week.classList.remove('current-week');
+                const itemDate = new Date(plannerCurrentWeekStart);
+                itemDate.setDate(itemDate.getDate() + (index * 7) - (index * 7));
+                
+                const checkDate = new Date(plannerCurrentWeekStart);
+                checkDate.setDate(checkDate.getDate() + (index * 7));
+                
+                if (formatPlannerDateISO(checkDate) === weekStartDate) {
+                    week.classList.add('current-week');
+                }
+            });
+        }
+
+        function renderPlannerGrid() {
+            console.log('renderPlannerGrid called');
+            const grid = document.getElementById('plannerGrid');
+            if (!grid) {
+                console.error('plannerGrid element not found!');
+                return;
+            }
+            
+            grid.innerHTML = '';
+            console.log('Grid cleared, adding cells...');
+
+            // Header row
+            const timeHeader = document.createElement('div');
+            timeHeader.className = 'planner-header-cell';
+            timeHeader.textContent = 'Time';
+            grid.appendChild(timeHeader);
+
+            PLANNER_DAYS.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'planner-header-cell';
+                dayHeader.textContent = day;
+                grid.appendChild(dayHeader);
+            });
+
+            // Time slots from 4:00 to 21:00 (9:00 PM)
+            let cellCount = 0;
+            for (let hour = 4; hour < 21; hour++) {
+                for (let minute = 0; minute < 60; minute += 30) {
+                    const timeStr = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                    
+                    // Calculate end time for range display
+                    let endHour = hour;
+                    let endMinute = minute + 30;
+                    if (endMinute >= 60) {
+                        endHour++;
+                        endMinute = 0;
+                    }
+                    const endTimeStr = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
+                    const displayTime = `${timeStr}-${endTimeStr}`;
+
+                    const timeCell = document.createElement('div');
+                    timeCell.className = 'planner-cell planner-time-cell';
+                    timeCell.textContent = displayTime;
+                    grid.appendChild(timeCell);
+
+                    for (let day = 0; day < 7; day++) {
+                        const contentCell = createPlannerCell(day, timeStr);
+                        grid.appendChild(contentCell);
+                        cellCount++;
+                    }
+                }
+            }
+            
+            console.log(`Grid rendered with ${cellCount} content cells`);
+        }
+
+        function formatPlannerTime(hour, minute) {
+            const period = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+            return minute === 0 ? `${displayHour}${period}` : `${displayHour}:${minute}${period}`;
+        }
+
+        function createPlannerCell(dayIndex, timeSlot) {
+            const cell = document.createElement('div');
+            cell.className = 'planner-cell planner-content-cell';
+            cell.dataset.day = dayIndex;
+            cell.dataset.time = timeSlot;
+
+            const key = `${dayIndex}-${timeSlot}`;
+            const blockData = plannerTimeBlocks[key];
+
+            if (blockData && blockData.title) {
+                cell.classList.add('filled');
+                
+                // Apply color coding based on color value
+                const color = blockData.color || '#217346';
+                let bgColor, borderColor;
+                
+                switch(color) {
+                    case '#d32f2f': // High priority - Red
+                        bgColor = '#ffebee';
+                        borderColor = '#d32f2f';
+                        break;
+                    case '#f57c00': // Medium-high - Orange
+                        bgColor = '#fff3e0';
+                        borderColor = '#f57c00';
+                        break;
+                    case '#fbc02d': // Medium - Yellow
+                        bgColor = '#fffde7';
+                        borderColor = '#fbc02d';
+                        break;
+                    case '#217346': // Normal - Green
+                        bgColor = '#e8f5e9';
+                        borderColor = '#217346';
+                        break;
+                    case '#1976d2': // Low priority - Blue
+                        bgColor = '#e3f2fd';
+                        borderColor = '#1976d2';
+                        break;
+                    case '#7b1fa2': // Info - Purple
+                        bgColor = '#f3e5f5';
+                        borderColor = '#7b1fa2';
+                        break;
+                    default:
+                        bgColor = '#e8f5e9';
+                        borderColor = '#217346';
+                }
+                
+                cell.style.background = bgColor;
+                cell.style.borderLeft = `4px solid ${borderColor}`;
+                
+                // Add priority indicator
+                let priorityIcon = '';
+                if (color === '#d32f2f') priorityIcon = '🔴 ';
+                else if (color === '#f57c00') priorityIcon = '🟠 ';
+                else if (color === '#fbc02d') priorityIcon = '🟡 ';
+                
+                cell.innerHTML = `
+                    <div class="block-content-title">${priorityIcon}${blockData.title}</div>
+                    ${blockData.description ? `<div class="block-content-desc">${blockData.description.substring(0, 40)}...</div>` : ''}
+                `;
+            } else {
+                cell.innerHTML = '<div class="empty-cell-indicator">+</div>';
+            }
+
+            cell.onclick = () => openPlannerModal(dayIndex, timeSlot, blockData);
+
+            return cell;
+        }
+
+        function openPlannerModal(dayIndex, timeSlot, blockData) {
+            editingPlannerBlock = { dayIndex, timeSlot, blockData };
+
+            const modal = document.getElementById('plannerModal');
+            const titleInput = document.getElementById('plannerBlockTitle');
+            const descInput = document.getElementById('plannerBlockDesc');
+            const colorSelect = document.getElementById('plannerBlockColor');
+            const deleteBtn = document.getElementById('plannerDeleteBtn');
+
+            if (blockData) {
+                titleInput.value = blockData.title || '';
+                descInput.value = blockData.description || '';
+                colorSelect.value = blockData.color || '#217346';
+                deleteBtn.style.display = 'inline-block';
+            } else {
+                titleInput.value = '';
+                descInput.value = '';
+                colorSelect.value = '#217346';
+                deleteBtn.style.display = 'none';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closePlannerModal() {
+            document.getElementById('plannerModal').classList.remove('active');
+            editingPlannerBlock = null;
+        }
+
+        async function savePlannerBlock() {
+            const title = document.getElementById('plannerBlockTitle').value;
+            const description = document.getElementById('plannerBlockDesc').value;
+            const color = document.getElementById('plannerBlockColor').value;
+
+            if (!title.trim()) {
+                alert('Please enter a title');
+                return;
+            }
+
+            const { dayIndex, timeSlot, blockData } = editingPlannerBlock;
+
+            try {
+                if (blockData && blockData.id) {
+                    const response = await fetch(`${API_BASE}/blocks/${blockData.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title, description, color })
+                    });
+                    const data = await response.json();
+                    plannerTimeBlocks[`${dayIndex}-${timeSlot}`] = data.block;
+                } else {
+                    const response = await fetch(`${API_BASE}/planners/${plannerData.id}/blocks`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            day_index: dayIndex,
+                            time_slot: timeSlot,
+                            title,
+                            description,
+                            color
+                        })
+                    });
+                    const data = await response.json();
+                    plannerTimeBlocks[`${dayIndex}-${timeSlot}`] = data.block;
+                }
+
+                renderPlannerGrid();
+                closePlannerModal();
+
+            } catch (error) {
+                console.error('Error saving block:', error);
+                alert('Error saving time block');
+            }
+        }
+
+        async function deletePlannerBlock() {
+            const { blockData } = editingPlannerBlock;
+
+            if (!blockData || !blockData.id) return;
+
+            if (!confirm('Delete this time block?')) return;
+
+            try {
+                await fetch(`${API_BASE}/blocks/${blockData.id}`, {
+                    method: 'DELETE'
+                });
+
+                const key = `${blockData.day_index}-${blockData.time_slot}`;
+                delete plannerTimeBlocks[key];
+
+                renderPlannerGrid();
+                closePlannerModal();
+
+            } catch (error) {
+                console.error('Error deleting block:', error);
+                alert('Error deleting time block');
+            }
+        }
+
+        function goToPlannerToday() {
+            const today = new Date();
+            const monday = getPlannerMonday(today);
+            plannerCurrentWeekStart = monday;
+            renderPlannerCalendar();
+            loadPlannerWeek(formatPlannerDateISO(monday));
+        }
+
+        // Close modal on outside click
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'plannerModal') {
+                closePlannerModal();
+            }
+        });
     </script>
+
+    <!-- Planner View (Full Screen) -->
+    <div class="planner-view" id="plannerView">
+        <div class="planner-header">
+            <h1>Weekly Planner</h1>
+            <button class="exit-planner-btn" onclick="exitPlanningMode()">Exit Planning Mode</button>
+        </div>
+
+        <div class="planner-toolbar">
+            <button class="planner-btn active" onclick="goToPlannerToday()">Today</button>
+        </div>
+
+        <div class="planner-calendar-bar">
+            <div class="planner-weeks" id="plannerWeeksContainer"></div>
+        </div>
+
+        <div class="planner-main">
+            <div class="planner-week-title">
+                <h2 id="plannerWeekTitle">Week of ...</h2>
+                <div class="date-range" id="plannerDateRange"></div>
+            </div>
+
+            <div class="planner-grid" id="plannerGrid"></div>
+        </div>
+    </div>
+
+    <!-- Planner Modal -->
+    <div class="planner-modal" id="plannerModal">
+        <div class="planner-modal-content">
+            <div class="planner-modal-header">
+                <h3>Edit Time Block</h3>
+                <button class="planner-modal-close" onclick="closePlannerModal()">&times;</button>
+            </div>
+            <div class="planner-modal-body">
+                <div class="planner-form-group">
+                    <label>Title</label>
+                    <input type="text" id="plannerBlockTitle" placeholder="Enter title...">
+                </div>
+                <div class="planner-form-group">
+                    <label>Description</label>
+                    <textarea id="plannerBlockDesc" placeholder="Enter description..."></textarea>
+                </div>
+                <div class="planner-form-group">
+                    <label>Priority / Color</label>
+                    <select id="plannerBlockColor">
+                        <option value="#d32f2f">🔴 High Priority (Red)</option>
+                        <option value="#f57c00">🟠 Medium-High (Orange)</option>
+                        <option value="#fbc02d">🟡 Medium (Yellow)</option>
+                        <option value="#217346" selected>🟢 Normal (Green)</option>
+                        <option value="#1976d2">🔵 Low Priority (Blue)</option>
+                        <option value="#7b1fa2">🟣 Info (Purple)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="planner-modal-footer">
+                <button class="planner-modal-btn delete" id="plannerDeleteBtn" onclick="deletePlannerBlock()" style="display: none;">Delete</button>
+                <button class="planner-modal-btn" onclick="closePlannerModal()">Cancel</button>
+                <button class="planner-modal-btn save" onclick="savePlannerBlock()">Save</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

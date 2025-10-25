@@ -3,8 +3,10 @@
 ## TODO
 
 * Need to add a migration script for the code.
-* Need to add .xlsx file storage and spreadsheet/weekly planner capability.
-* Need to add a method for automated email messages as well as user friendly method to add their email, as well as a way for a user to set the time and days that you want a reminder email, along with a method that let's you select time blocks etc. 
+* Need to add .xlsx and .md file editing (I should be able to select .md files to edit as well as a pdf viewer, so I can drop it in and then view it)
+* Need to add a method for automated email messages as well as user friendly method to add their email, as well as a way for a user to set the time and days that you want a reminder email, along with a method that let's you select time blocks etc. Need to use the Gmail API for free emails. May need to set up a workflow for sending emails, not sure about that yet. 
+
+
 
 A beautiful and powerful project management tool with a Gantt chart interface. Built with Python and SQLite - perfect for managing projects, tasks, and deadlines!
 
