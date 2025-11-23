@@ -3,7 +3,8 @@
 ## TODO
 
 * Need to add a migration script for the code.
-* Need to add a method for automated email messages as well as user friendly method to add their email, as well as a way for a user to set the time and days that you want a reminder email, along with a method that let's you select time blocks etc. Need to use the Gmail API for free emails. May need to set up a workflow for sending emails, not sure about that yet. 
+* Need to add a method for automated email messages as well as user friendly method to add their email, as well as a way for a user to set the time and days that you want a reminder email, along with a method that let's you select time blocks etc. Need to use the Gmail API for free emails. May need to set up a workflow for sending emails, not sure about that yet.
+* Need to add methods to export Gantt Chart as an imageor maybe a different format and then export the weekly plans as spreadsheets (.xlsx format), so I can use with google sheets or Excel. 
 
 
 

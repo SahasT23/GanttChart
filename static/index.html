@@ -1145,6 +1145,222 @@
             border: none;
             background: white;
         }
+
+        /* Excel Editor Modal */
+        .excel-editor-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10001;
+        }
+
+        .excel-editor-modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .excel-editor-content {
+            background: white;
+            width: 95%;
+            height: 95%;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+        }
+
+        .excel-editor-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .excel-editor-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .excel-editor-header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .excel-editor-close {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .excel-editor-close:hover {
+            color: #333;
+        }
+
+        .excel-editor-toolbar {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 10px 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .excel-file-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .excel-file-selector select {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 200px;
+        }
+
+        .excel-sheet-tabs {
+            display: flex;
+            gap: 5px;
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .excel-sheet-tab {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px 4px 0 0;
+            background: white;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .excel-sheet-tab:hover {
+            background: #e8eaed;
+        }
+
+        .excel-sheet-tab.active {
+            background: white;
+            border-bottom-color: white;
+            font-weight: 500;
+            color: #4285f4;
+        }
+
+        .excel-spreadsheet-container {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .excel-spreadsheet {
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .excel-spreadsheet th {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 8px;
+            font-weight: 500;
+            text-align: center;
+            min-width: 100px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-size: 13px;
+        }
+
+        .excel-spreadsheet td {
+            border: 1px solid #ddd;
+            padding: 0;
+            position: relative;
+        }
+
+        .excel-cell-input {
+            width: 100%;
+            min-width: 100px;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .excel-cell-input:focus {
+            outline: 2px solid #4285f4;
+            outline-offset: -2px;
+            background: white;
+            z-index: 5;
+        }
+
+        .excel-row-header {
+            background: #f8f9fa;
+            font-weight: 500;
+            text-align: center;
+            padding: 8px;
+            border: 1px solid #ddd;
+            min-width: 50px;
+            position: sticky;
+            left: 0;
+            z-index: 9;
+            font-size: 13px;
+        }
+
+        .excel-empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .excel-empty-state h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .excel-status-bar {
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 8px 20px;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .excel-upload-btn {
+            padding: 6px 12px;
+            border: 1px solid #4285f4;
+            border-radius: 4px;
+            color: #4285f4;
+            cursor: pointer;
+            font-size: 13px;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .excel-upload-btn:hover {
+            background: #e8f0fe;
+        }
     </style>
 </head>
 <body>
@@ -1223,7 +1439,12 @@
                 <!-- Files Panel -->
                 <div id="files-panel" class="sidebar-panel">
                     <div class="files-section">
-                        <h4 style="margin-bottom: 15px;">📁 View Files</h4>
+                        <h4 style="margin-bottom: 15px;">📁 Files</h4>
+                        
+                        <!-- Excel Editor Button -->
+                        <button class="btn primary" style="width: 100%; margin-bottom: 15px;" onclick="openExcelEditorModal()">
+                            📊 Open Excel Editor
+                        </button>
                         
                         <!-- Markdown Viewer -->
                         <div id="md-drop-zone" style="margin-bottom: 15px;">
@@ -2684,6 +2905,86 @@
             loadPlannerWeek(formatPlannerDateISO(monday));
         }
 
+        async function exportPlannerToExcel() {
+            if (!plannerData || !plannerData.id) {
+                alert('No planner loaded to export');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/planners/${plannerData.id}/export`);
+                
+                if (!response.ok) {
+                    throw new Error('Export failed');
+                }
+
+                // Get filename from response headers or use default
+                const contentDisposition = response.headers.get('content-disposition');
+                let filename = 'planner.xlsx';
+                if (contentDisposition) {
+                    const match = contentDisposition.match(/filename="?(.+)"?/);
+                    if (match) filename = match[1];
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                alert('Planner exported successfully!');
+            } catch (error) {
+                console.error('Error exporting planner:', error);
+                alert('Error exporting planner: ' + error.message);
+            }
+        }
+
+        async function importPlannerFromExcel(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!plannerData || !plannerData.id) {
+                alert('No planner loaded. Please select a week first.');
+                event.target.value = '';
+                return;
+            }
+
+            if (!confirm('This will replace all time blocks in the current week. Continue?')) {
+                event.target.value = '';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch(`${API_BASE}/planners/${plannerData.id}/import`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Import failed');
+                }
+
+                const data = await response.json();
+                alert(`Successfully imported ${data.count} time blocks!`);
+                
+                // Reload the planner to show imported data
+                loadPlannerWeek(formatPlannerDateISO(plannerCurrentWeekStart));
+                
+            } catch (error) {
+                console.error('Error importing planner:', error);
+                alert('Error importing planner: ' + error.message);
+            }
+
+            event.target.value = '';
+        }
+
         // Close modal on outside click
         document.addEventListener('click', (e) => {
             if (e.target.id === 'plannerModal') {
@@ -2701,6 +3002,9 @@
 
         <div class="planner-toolbar">
             <button class="planner-btn active" onclick="goToPlannerToday()">Today</button>
+            <button class="planner-btn" onclick="exportPlannerToExcel()">📊 Export to Excel</button>
+            <label for="plannerExcelImport" class="planner-btn" style="cursor: pointer; margin: 0;">📥 Import from Excel</label>
+            <input type="file" id="plannerExcelImport" accept=".xlsx,.xls" style="display: none;" onchange="importPlannerFromExcel(event)">
         </div>
 
         <div class="planner-calendar-bar">
@@ -2772,6 +3076,44 @@
         </div>
         <div class="pdf-viewer-body">
             <iframe class="pdf-viewer-iframe" id="pdfViewerIframe"></iframe>
+        </div>
+    </div>
+
+    <!-- Excel Editor Modal -->
+    <div class="excel-editor-modal" id="excelEditorModal">
+        <div class="excel-editor-content">
+            <div class="excel-editor-header">
+                <div class="excel-editor-title">📊 Excel Editor</div>
+                <div class="excel-editor-header-actions">
+                    <label for="excelFileUpload" class="excel-upload-btn">📁 Upload File</label>
+                    <input type="file" id="excelFileUpload" accept=".xlsx,.xls" style="display: none;" onchange="uploadExcelFile(event)">
+                    <button class="btn primary" onclick="saveExcelChanges()" id="excelSaveBtn" style="display: none;">💾 Save Changes</button>
+                </div>
+                <button class="excel-editor-close" onclick="closeExcelEditor()">&times;</button>
+            </div>
+
+            <div class="excel-editor-toolbar">
+                <div class="excel-file-selector">
+                    <label>File:</label>
+                    <select id="excelFileSelect" onchange="loadSelectedExcelFile()">
+                        <option value="">Select a file...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="excel-sheet-tabs" id="excelSheetTabs"></div>
+
+            <div class="excel-spreadsheet-container" id="excelSpreadsheetContainer">
+                <div class="excel-empty-state">
+                    <h2>📊 No File Selected</h2>
+                    <p>Select an existing Excel file or upload a new one to start editing</p>
+                </div>
+            </div>
+
+            <div class="excel-status-bar">
+                <span id="excelStatusText">Ready</span>
+                <span id="excelCellInfo"></span>
+            </div>
         </div>
     </div>
 
@@ -2887,8 +3229,319 @@
             if (e.key === 'Escape') {
                 closeMdViewer();
                 closePdfViewer();
+                closeExcelEditor();
             }
         });
+
+        // EXCEL EDITOR FUNCTIONALITY
+        let currentExcelFileId = null;
+        let currentExcelSheetData = null;
+        let currentExcelSheetName = null;
+        let excelFileData = null;
+        let hasExcelChanges = false;
+        let originalExcelData = null;
+
+        async function openExcelEditorModal() {
+            document.getElementById('excelEditorModal').classList.add('active');
+            await loadExcelFileList();
+        }
+
+        function closeExcelEditor() {
+            if (hasExcelChanges && !confirm('You have unsaved changes. Close anyway?')) {
+                return;
+            }
+            document.getElementById('excelEditorModal').classList.remove('active');
+            currentExcelFileId = null;
+            excelFileData = null;
+            hasExcelChanges = false;
+        }
+
+        async function loadExcelFileList() {
+            try {
+                const response = await fetch(`${API_BASE}/xlsx`);
+                const data = await response.json();
+                
+                const select = document.getElementById('excelFileSelect');
+                select.innerHTML = '<option value="">Select a file...</option>';
+                
+                data.files.forEach(file => {
+                    const option = document.createElement('option');
+                    option.value = file.id;
+                    option.textContent = file.filename;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading Excel files:', error);
+                updateExcelStatus('Error loading file list');
+            }
+        }
+
+        async function uploadExcelFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            updateExcelStatus('Uploading file...');
+
+            try {
+                const response = await fetch(`${API_BASE}/xlsx/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Upload failed');
+                }
+
+                const data = await response.json();
+                updateExcelStatus(`File uploaded: ${data.filename}`);
+                
+                await loadExcelFileList();
+                document.getElementById('excelFileSelect').value = data.file_id;
+                await loadSelectedExcelFile();
+            } catch (error) {
+                console.error('Error uploading Excel file:', error);
+                updateExcelStatus('Error uploading file');
+                alert('Error uploading file: ' + error.message);
+            }
+
+            event.target.value = '';
+        }
+
+        async function loadSelectedExcelFile() {
+            const fileId = document.getElementById('excelFileSelect').value;
+            if (!fileId) {
+                showExcelEmptyState();
+                return;
+            }
+
+            currentExcelFileId = fileId;
+            updateExcelStatus('Loading file...');
+
+            try {
+                const response = await fetch(`${API_BASE}/xlsx/${fileId}/read`);
+                if (!response.ok) {
+                    throw new Error('Failed to load file');
+                }
+
+                excelFileData = await response.json();
+                originalExcelData = JSON.parse(JSON.stringify(excelFileData));
+                hasExcelChanges = false;
+                document.getElementById('excelSaveBtn').style.display = 'none';
+                
+                renderExcelSheetTabs();
+                
+                const firstSheet = Object.keys(excelFileData.sheets)[0];
+                if (firstSheet) {
+                    loadExcelSheet(firstSheet);
+                }
+
+                updateExcelStatus(`Loaded: ${excelFileData.filename}`);
+            } catch (error) {
+                console.error('Error loading Excel file:', error);
+                updateExcelStatus('Error loading file');
+                alert('Error loading file: ' + error.message);
+            }
+        }
+
+        function renderExcelSheetTabs() {
+            const tabsContainer = document.getElementById('excelSheetTabs');
+            tabsContainer.innerHTML = '';
+
+            Object.keys(excelFileData.sheets).forEach(sheetName => {
+                const tab = document.createElement('div');
+                tab.className = 'excel-sheet-tab';
+                tab.textContent = sheetName;
+                tab.onclick = () => loadExcelSheet(sheetName);
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+        function loadExcelSheet(sheetName) {
+            currentExcelSheetName = sheetName;
+            currentExcelSheetData = excelFileData.sheets[sheetName];
+
+            document.querySelectorAll('.excel-sheet-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.textContent === sheetName);
+            });
+
+            renderExcelSpreadsheet();
+        }
+
+        function renderExcelSpreadsheet() {
+            const container = document.getElementById('excelSpreadsheetContainer');
+            const data = currentExcelSheetData.data;
+
+            if (!data || data.length === 0) {
+                container.innerHTML = '<div class="excel-empty-state"><h2>Empty Sheet</h2><p>This sheet has no data</p></div>';
+                return;
+            }
+
+            const maxCols = Math.max(...data.map(row => row.length));
+            
+            let html = '<table class="excel-spreadsheet">';
+            
+            html += '<tr><th class="excel-row-header"></th>';
+            for (let col = 0; col < maxCols; col++) {
+                html += `<th>${getExcelColumnLetter(col)}</th>`;
+            }
+            html += '</tr>';
+
+            data.forEach((row, rowIdx) => {
+                html += `<tr><td class="excel-row-header">${rowIdx + 1}</td>`;
+                
+                for (let col = 0; col < maxCols; col++) {
+                    const cell = row[col] || { value: '', style: {} };
+                    const value = cell.value !== null && cell.value !== undefined ? cell.value : '';
+                    
+                    let style = '';
+                    if (cell.style.background) {
+                        style += `background-color: ${cell.style.background};`;
+                    }
+                    if (cell.style.color) {
+                        style += `color: ${cell.style.color};`;
+                    }
+                    if (cell.style.bold) {
+                        style += `font-weight: bold;`;
+                    }
+
+                    html += `<td style="${style}">
+                        <input type="text" 
+                               class="excel-cell-input" 
+                               value="${escapeExcelHtml(String(value))}"
+                               data-row="${rowIdx}"
+                               data-col="${col}"
+                               onchange="updateExcelCell(${rowIdx}, ${col}, this.value)"
+                               onfocus="showExcelCellInfo(${rowIdx}, ${col})">
+                    </td>`;
+                }
+                
+                html += '</tr>';
+            });
+
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function getExcelColumnLetter(col) {
+            let letter = '';
+            while (col >= 0) {
+                letter = String.fromCharCode(65 + (col % 26)) + letter;
+                col = Math.floor(col / 26) - 1;
+            }
+            return letter;
+        }
+
+        function escapeExcelHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function updateExcelCell(row, col, value) {
+            if (!currentExcelSheetData || !currentExcelSheetData.data[row]) return;
+
+            while (currentExcelSheetData.data.length <= row) {
+                currentExcelSheetData.data.push([]);
+            }
+
+            while (currentExcelSheetData.data[row].length <= col) {
+                currentExcelSheetData.data[row].push({ value: '', style: {} });
+            }
+
+            currentExcelSheetData.data[row][col].value = value;
+            excelFileData.sheets[currentExcelSheetName] = currentExcelSheetData;
+
+            hasExcelChanges = true;
+            document.getElementById('excelSaveBtn').style.display = 'inline-block';
+            updateExcelStatus('Unsaved changes');
+        }
+
+        function showExcelCellInfo(row, col) {
+            const cellRef = `${getExcelColumnLetter(col)}${row + 1}`;
+            document.getElementById('excelCellInfo').textContent = cellRef;
+        }
+
+        async function saveExcelChanges() {
+            if (!currentExcelFileId || !hasExcelChanges) return;
+
+            updateExcelStatus('Saving changes...');
+            document.getElementById('excelSaveBtn').disabled = true;
+
+            try {
+                const updates = {
+                    sheets: {}
+                };
+
+                Object.keys(excelFileData.sheets).forEach(sheetName => {
+                    const currentSheet = excelFileData.sheets[sheetName];
+                    const originalSheet = originalExcelData.sheets[sheetName];
+                    const cells = [];
+
+                    currentSheet.data.forEach((row, rowIdx) => {
+                        row.forEach((cell, colIdx) => {
+                            const originalCell = originalSheet?.data?.[rowIdx]?.[colIdx];
+                            if (!originalCell || originalCell.value !== cell.value) {
+                                cells.push({
+                                    row: rowIdx,
+                                    col: colIdx,
+                                    value: cell.value,
+                                    style: cell.style
+                                });
+                            }
+                        });
+                    });
+
+                    if (cells.length > 0) {
+                        updates.sheets[sheetName] = { cells };
+                    }
+                });
+
+                const response = await fetch(`${API_BASE}/xlsx/${currentExcelFileId}/update`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updates)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Save failed');
+                }
+
+                hasExcelChanges = false;
+                originalExcelData = JSON.parse(JSON.stringify(excelFileData));
+                document.getElementById('excelSaveBtn').style.display = 'none';
+                updateExcelStatus('Changes saved successfully');
+                
+            } catch (error) {
+                console.error('Error saving Excel changes:', error);
+                updateExcelStatus('Error saving changes');
+                alert('Error saving changes: ' + error.message);
+            } finally {
+                document.getElementById('excelSaveBtn').disabled = false;
+            }
+        }
+
+        function showExcelEmptyState() {
+            document.getElementById('excelSpreadsheetContainer').innerHTML = `
+                <div class="excel-empty-state">
+                    <h2>📊 No File Selected</h2>
+                    <p>Select an existing Excel file or upload a new one to start editing</p>
+                </div>
+            `;
+            document.getElementById('excelSheetTabs').innerHTML = '';
+            currentExcelFileId = null;
+            excelFileData = null;
+            hasExcelChanges = false;
+            document.getElementById('excelSaveBtn').style.display = 'none';
+        }
+
+        function updateExcelStatus(message) {
+            document.getElementById('excelStatusText').textContent = message;
+        }
     </script>
 
 </body>

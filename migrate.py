@@ -1,3 +1,5 @@
+
+
 # """
 # Database Migration Script
 # Handles schema upgrades for the Gantt Chart application
@@ -7,7 +9,7 @@
 # from datetime import datetime
 
 # DATABASE_FILE = "gantt_app.db"
-# MIGRATION_VERSION = 2  # Current migration version
+# MIGRATION_VERSION = 3  # Current migration version
 
 # def get_connection():
 #     """Get a database connection"""
@@ -134,6 +136,37 @@
     
 #     return apply_migration(2, description, migration_sql)
 
+# def migration_v3():
+#     """Migration v3: Add markdown and PDF storage"""
+#     description = "Add markdown files and PDF storage tables"
+    
+#     migration_sql = '''
+#         CREATE TABLE IF NOT EXISTS markdown_files (
+#             id TEXT PRIMARY KEY,
+#             project_id TEXT,
+#             filename TEXT NOT NULL,
+#             content TEXT NOT NULL,
+#             created_at TEXT NOT NULL,
+#             updated_at TEXT NOT NULL,
+#             FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+#         );
+        
+#         CREATE TABLE IF NOT EXISTS pdf_files (
+#             id TEXT PRIMARY KEY,
+#             project_id TEXT,
+#             filename TEXT NOT NULL,
+#             file_data BLOB NOT NULL,
+#             created_at TEXT NOT NULL,
+#             updated_at TEXT NOT NULL,
+#             FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+#         );
+        
+#         CREATE INDEX IF NOT EXISTS idx_markdown_project ON markdown_files(project_id);
+#         CREATE INDEX IF NOT EXISTS idx_pdf_project ON pdf_files(project_id)
+#     '''
+    
+#     return apply_migration(3, description, migration_sql)
+
 # def run_migrations():
 #     """Run all pending migrations"""
 #     if not os.path.exists(DATABASE_FILE):
@@ -153,7 +186,8 @@
     
 #     migrations = [
 #         (1, migration_v1),
-#         (2, migration_v2)
+#         (2, migration_v2),
+#         (3, migration_v3)
 #     ]
     
 #     success = True

@@ -1,3 +1,4 @@
+
 # import sqlite3
 # import json
 # from datetime import datetime
@@ -857,6 +858,166 @@
 #     conn.close()
 #     return affected
 
+# # Markdown file operations
+# def create_markdown_file(file_data: Dict) -> Dict:
+#     """Store a markdown file in the database"""
+#     conn = get_connection()
+#     cursor = conn.cursor()
+    
+#     cursor.execute('''
+#         INSERT INTO markdown_files (
+#             id, project_id, filename, content, created_at, updated_at
+#         ) VALUES (?, ?, ?, ?, ?, ?)
+#     ''', (
+#         file_data['id'],
+#         file_data.get('project_id'),
+#         file_data['filename'],
+#         file_data['content'],
+#         file_data['created_at'],
+#         file_data['updated_at']
+#     ))
+    
+#     conn.commit()
+#     conn.close()
+#     return file_data
+
+# def get_markdown_file(file_id: str) -> Optional[Dict]:
+#     """Get a markdown file from the database"""
+#     conn = get_connection()
+#     cursor = conn.cursor()
+    
+#     cursor.execute('SELECT * FROM markdown_files WHERE id = ?', (file_id,))
+#     row = cursor.fetchone()
+#     conn.close()
+    
+#     if row:
+#         return dict(row)
+#     return None
+
+# def get_all_markdown_files(project_id: str = None) -> List[Dict]:
+#     """Get all markdown files"""
+#     conn = get_connection()
+#     cursor = conn.cursor()
+    
+#     if project_id:
+#         cursor.execute('''
+#             SELECT id, project_id, filename, created_at, updated_at 
+#             FROM markdown_files 
+#             WHERE project_id = ? 
+#             ORDER BY updated_at DESC
+#         ''', (project_id,))
+#     else:
+#         cursor.execute('''
+#             SELECT id, project_id, filename, created_at, updated_at 
+#             FROM markdown_files 
+#             ORDER BY updated_at DESC
+#         ''')
+    
+#     rows = cursor.fetchall()
+#     conn.close()
+    
+#     return [dict(row) for row in rows]
+
+# def update_markdown_file(file_id: str, content: str) -> Optional[Dict]:
+#     """Update a markdown file"""
+#     conn = get_connection()
+#     cursor = conn.cursor()
+    
+#     cursor.execute('''
+#         UPDATE markdown_files 
+#         SET content = ?, updated_at = ? 
+#         WHERE id = ?
+#     ''', (content, datetime.now().isoformat(), file_id))
+    
+#     conn.commit()
+#     conn.close()
+    
+#     return get_markdown_file(file_id)
+
+# def delete_markdown_file(file_id: str) -> bool:
+#     """Delete a markdown file"""
+#     conn = get_connection()
+#     cursor = conn.cursor()
+    
+#     cursor.execute('DELETE FROM markdown_files WHERE id = ?', (file_id,))
+    
+#     conn.commit()
+#     affected = cursor.rowcount > 0
+#     conn.close()
+#     return affected
+
+# # PDF file operations
+# def create_pdf_file(file_data: Dict) -> Dict:
+#     """Store a PDF file in the database"""
+#     conn = get_connection()
+#     cursor = conn.cursor()
+    
+#     cursor.execute('''
+#         INSERT INTO pdf_files (
+#             id, project_id, filename, file_data, created_at, updated_at
+#         ) VALUES (?, ?, ?, ?, ?, ?)
+#     ''', (
+#         file_data['id'],
+#         file_data.get('project_id'),
+#         file_data['filename'],
+#         file_data['file_data'],
+#         file_data['created_at'],
+#         file_data['updated_at']
+#     ))
+    
+#     conn.commit()
+#     conn.close()
+#     return file_data
+
+# def get_pdf_file(file_id: str) -> Optional[Dict]:
+#     """Get a PDF file from the database"""
+#     conn = get_connection()
+#     cursor = conn.cursor()
+    
+#     cursor.execute('SELECT * FROM pdf_files WHERE id = ?', (file_id,))
+#     row = cursor.fetchone()
+#     conn.close()
+    
+#     if row:
+#         return dict(row)
+#     return None
+
+# def get_all_pdf_files(project_id: str = None) -> List[Dict]:
+#     """Get all PDF files"""
+#     conn = get_connection()
+#     cursor = conn.cursor()
+    
+#     if project_id:
+#         cursor.execute('''
+#             SELECT id, project_id, filename, created_at, updated_at 
+#             FROM pdf_files 
+#             WHERE project_id = ? 
+#             ORDER BY updated_at DESC
+#         ''', (project_id,))
+#     else:
+#         cursor.execute('''
+#             SELECT id, project_id, filename, created_at, updated_at 
+#             FROM pdf_files 
+#             ORDER BY updated_at DESC
+#         ''')
+    
+#     rows = cursor.fetchall()
+#     conn.close()
+    
+#     return [dict(row) for row in rows]
+
+# def delete_pdf_file(file_id: str) -> bool:
+#     """Delete a PDF file"""
+#     conn = get_connection()
+#     cursor = conn.cursor()
+    
+#     cursor.execute('DELETE FROM pdf_files WHERE id = ?', (file_id,))
+    
+#     conn.commit()
+#     affected = cursor.rowcount > 0
+#     conn.close()
+#     return affected
+
 # if __name__ == "__main__":
 #     init_database()
 
@@ -1470,6 +1631,22 @@ def get_planner_by_week(week_start_date: str, project_id: str = None) -> Optiona
             WHERE week_start_date = ?
         ''', (week_start_date,))
     
+    row = cursor.fetchone()
+    conn.close()
+    
+    if row:
+        planner = dict(row)
+        planner['custom_rows'] = json.loads(planner.get('custom_rows', '[]'))
+        planner['custom_columns'] = json.loads(planner.get('custom_columns', '[]'))
+        return planner
+    return None
+
+def get_planner_by_id(planner_id: str) -> Optional[Dict]:
+    """Get a planner by ID"""
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT * FROM weekly_planners WHERE id = ?', (planner_id,))
     row = cursor.fetchone()
     conn.close()
     
